@@ -1,0 +1,107 @@
+import { Cache, Config } from './interfaces';
+import * as YAML from 'yaml';
+import * as fs from 'fs';
+
+const cache: Cache = {
+  userId: '',
+  ticketIDs: [],
+  ticketStatus: {},
+  ticketSent: [],
+  html: '',
+  noSound: '',
+  markdown: '',
+  io: {},
+  config: {
+    use_llm: false
+  } as Config,
+};
+
+// On Render, config.yaml may not exist. Build config from environment variables.
+if (fs.existsSync('./config/config.yaml')) {
+  cache.config = YAML.parse(
+    fs.readFileSync('./config/config.yaml', 'utf8'),
+  );
+} else {
+  // Render / cloud deployment: read from env vars
+  cache.config = {
+    bot_token: process.env.BOT_TOKEN || '',
+    staffchat_id: process.env.STAFFCHAT_ID || '',
+    staffchat_type: process.env.STAFFCHAT_TYPE || 'telegram',
+    staffchat_parse_mode: process.env.STAFFCHAT_PARSE_MODE || 'MarkdownV2',
+    owner_id: process.env.OWNER_ID || '',
+    parse_mode: process.env.PARSE_MODE || 'Markdown',
+    spam_cant_msg: parseInt(process.env.SPAM_CANT_MSG || '5'),
+    spam_time: parseInt(process.env.SPAM_TIME || '300000'),
+    allow_private: process.env.ALLOW_PRIVATE === 'true',
+    direct_reply: process.env.DIRECT_REPLY === 'true',
+    auto_close_tickets: process.env.AUTO_CLOSE_TICKETS !== 'false',
+    anonymous_tickets: process.env.ANONYMOUS_TICKETS === 'true',
+    anonymous_replies: process.env.ANONYMOUS_REPLIES === 'true',
+    show_auto_replied: process.env.SHOW_AUTO_REPLIED === 'true',
+    show_user_ticket: process.env.SHOW_USER_TICKET === 'true',
+    autoreply_confirmation: process.env.AUTOREPLY_CONFIRMATION !== 'false',
+    clean_replies: process.env.CLEAN_REPLIES === 'true',
+    pass_start: process.env.PASS_START === 'true',
+    signal_enabled: false,
+    signal_number: '',
+    signal_host: 'signal-cli:40153',
+    web_server: false,
+    web_server_port: 8080,
+    dev_mode: false,
+    mongodb_uri: process.env.MONGO_URI || '',
+    use_llm: process.env.USE_LLM === 'true',
+    llm_api_key: process.env.LLM_API_KEY || '',
+    llm_base_url: process.env.LLM_BASE_URL || 'https://api.openai.com/v1',
+    llm_model: process.env.LLM_MODEL || 'gpt-3.5-turbo',
+    llm_knowledge: process.env.LLM_KNOWLEDGE || '',
+    language: {
+      startCommandText: 'Welcome to our support chat! Ask your question here.',
+      faqCommandText: 'Get this bot at: [github.com](https://github.com/bostrot/telegram-support-bot)',
+      helpCommandText: '*Available commands:* /help /faq /id',
+      helpCommandStaffText: '*Available commands:*\n/start - Get introduction\n/faq - Show FAQ\n/open - *Staff* Show open tickets\n/reopen - *Staff* Reopen ticket\n/close - *Staff* Close ticket\n/clear - *Staff* Close all tickets\n/ban - *Staff* Ban user\n/unban - *Staff* Unban user',
+      confirmationMessage: 'Thank you for contacting us. We will answer as soon as possible.',
+      blockedSpam: 'You sent quite a number of questions. Please calm down and wait.',
+      ticket: 'Ticket',
+      closed: 'closed',
+      acceptedBy: 'was accepted by',
+      dear: 'Hi',
+      regards: 'Regards,',
+      from: 'from',
+      language: 'Language',
+      msg_sent: 'Message sent to user',
+      file_sent: 'File sent to user',
+      usr_with_ticket: 'User with ticket',
+      banned: 'banned',
+      replyPrivate: 'Reply in private',
+      services: 'Select a service from the list below',
+      customer: 'customer',
+      msgForwarding: 'Your messages will now be forwarded to: ',
+      back: 'Go back',
+      whatSubCategory: 'Which subcategory describes your needs?',
+      prvChatEnded: 'Private chat ended.',
+      prvChatOpened: 'Private Chat opened with customer.',
+      prvChatEnd: 'End Private chat',
+      prvChatOpenedCustomer: 'Opened private chat',
+      instructionsSent: 'Instructions were sent to you.',
+      openTickets: 'Open Tickets',
+      support: 'Support',
+      prvChatOnly: 'This command can be used in private chat only.',
+      ticketClosed: 'Your ticket was closed. You can open a new one anytime.',
+      links: 'Direct support links',
+      textFirst: 'Please send a message before sending an image.',
+      ticketClosedError: 'You cannot reply to a closed ticket.',
+      automatedReply: 'This is an automated reply.',
+      automatedReplyAuthor: 'Bot.',
+      doesntHelp: 'This does not help.',
+      automatedReplySent: 'Automated reply was sent to the user.',
+      ticketReopened: 'Ticket reopened.',
+      regardsGroup: 'Support Group',
+      yourTicketId: 'Your ticket ID',
+      autoreply: [],
+    } as any,
+    autoreply: [],
+    categories: [],
+  } as any;
+}
+
+export default cache;
