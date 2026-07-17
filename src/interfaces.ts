@@ -68,6 +68,8 @@ export interface Language {
   yourTicketId: string;
   helpCommandStaffText: string;
   regardsGroup: string;
+  autoClosed: string;
+  autoClosedStaff: string;
   autoreply: Autoreply[];
 }
 
@@ -101,6 +103,8 @@ export class Config {
   allow_private: boolean = false;
   direct_reply: boolean = false;
   auto_close_tickets: boolean = false;
+  auto_close_enabled: boolean = false;
+  auto_close_timeout: number = 300000;
   anonymous_tickets: boolean = false;
   anonymous_replies: boolean = false;
   show_auto_replied: boolean = true;
@@ -132,6 +136,7 @@ export interface Cache {
   ticketIDs: any;
   ticketStatus: any;
   ticketSent: any;
+  ticketTimers: Record<number, NodeJS.Timeout>;
   html: string;
   noSound: string;
   markdown: string;

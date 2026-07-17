@@ -4,6 +4,7 @@ import * as db from './db';
 import { Context } from './interfaces';
 import { ISupportee } from './db';
 import * as log from 'fancy-log'
+import { resetAutoCloseTimer } from './autoclose';
 
 /**
  * Generates a ticket message.
@@ -166,9 +167,9 @@ async function chat(ctx: Context) {
   log.info(`Answer: ${ticketMsg(name, ctx.message)}`);
   cache.ticketSent[ticketId] = null;
 
-  // Auto-close the ticket if enabled
-  if (cache.config.auto_close_tickets) {
-      db.add(ticketId, 'closed', null, ticket.messenger);
+  // Reset auto-close timer when staff replies
+  if (cache.config.auto_close_enabled) {
+    resetAutoCloseTimer(ticket.ticketId);
   }
 }
 

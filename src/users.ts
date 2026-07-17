@@ -5,6 +5,7 @@ import * as db from './db';
 import { strictEscape as esc, reply, sendMessage } from './middleware';
 import { ISupportee } from './db';
 import * as log from 'fancy-log'
+import { startAutoCloseTimer, resetAutoCloseTimer } from './autoclose';
 
 const TIME_BETWEEN_CONFIRMATION_MESSAGES = 86400000; // 24 hours
 
@@ -127,6 +128,9 @@ async function processTicket(
   );
   db.addIdAndName(ticket.ticketId, messageId, ctx.message.from.first_name);
 
+  // Start auto-close timer for new ticket
+  startAutoCloseTimer(ticket.ticketId, ticket.userid.toString(), ticket.messenger);
+
   // If group flag is set and not the admin chat, forward to group chat
   if (ctx.session.group && ctx.session.group !== config.staffchat_id) {
     const groupOptions = config.allow_private
@@ -198,6 +202,10 @@ async function chat(ctx: Context, chat: { id: string }) {
   } else if (cache.ticketSent[cache.userId] < config.spam_cant_msg) {
     cache.ticketSent[cache.userId]++;
     const ticket = await db.getTicketByUserId(cache.userId, ctx.session.groupCategory);
+
+    // Reset auto-close timer on user follow-up
+    if (ticket) resetAutoCloseTimer(ticket.ticketId);
+
     sendMessage(
       config.staffchat_id,
       config.staffchat_type,
