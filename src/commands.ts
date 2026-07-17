@@ -147,7 +147,7 @@ const banCommand = (ctx: Context): void => {
   if (!replyText) return;
   const ticketId = extractTicketId(replyText);
   if (!ticketId) return;
-  db.getByTicketId(ticketId, (ticket: { userid: any; id: { toString: () => string } }) => {
+  db.getByTicketId(ticketId, (ticket: { userid: any; ticketId: { toString: () => string } }) => {
     db.add(ticket.userid, 'banned', '', ctx.messenger);
     middleware.sendMessage(
       ctx.chat.id,
@@ -168,7 +168,7 @@ const reopenCommand = (ctx: Context): void => {
   if (!replyText) return;
   const ticketId = extractTicketId(replyText);
   if (!ticketId) return;
-  db.getByTicketId(ticketId, (ticket: { userid: any; id: { toString: () => string } }) => {
+  db.getByTicketId(ticketId, (ticket: { userid: any; ticketId: { toString: () => string } }) => {
     db.reopen(ticket.userid, '', ctx.messenger);
     middleware.sendMessage(
       ctx.chat.id,
@@ -189,7 +189,7 @@ const unbanCommand = (ctx: Context): void => {
   if (!replyText) return;
   const ticketId = extractTicketId(replyText);
   if (!ticketId) return;
-  db.getByTicketId(ticketId, (ticket: { userid: any; id: { toString: () => string } }) => {
+  db.getByTicketId(ticketId, (ticket: { userid: any; ticketId: { toString: () => string } }) => {
     db.add(ticket.userid, 'closed', '', ctx.messenger);
     middleware.sendMessage(
       ctx.chat.id,
