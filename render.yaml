@@ -29,5 +29,13 @@ services:
         value: 'closed'
       - key: LANG_HELP_STAFF_TEXT
         value: '*Staff commands:*\n/open - Show open tickets\n/close - Close ticket\n/reopen - Reopen ticket\n/ban - Ban user\n/unban - Unban user\n/clear - Close all tickets'
+      - key: AUTO_CLOSE_ENABLED
+        value: 'true'
+      - key: AUTO_CLOSE_TIMEOUT
+        value: '300000'
+      - key: LANG_AUTO_CLOSED_TEXT
+        value: 'This ticket has been automatically closed due to 5 minutes of inactivity.'
+      - key: LANG_AUTO_CLOSED_STAFF_TEXT
+        value: 'Ticket auto-closed: 5 minutes of inactivity.'
       - key: MONGO_URI
         sync: false
