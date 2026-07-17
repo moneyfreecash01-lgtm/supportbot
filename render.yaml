@@ -9,5 +9,25 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: LANG_START_TEXT
+        value: 'Welcome to our Support Bot!'
+      - key: LANG_CONFIRM_TEXT
+        value: 'Thank you for contacting us. We will reply shortly.'
+      - key: LANG_SERVICES_TEXT
+        value: 'Select a support category below:'
+      - key: LANG_TICKET_CLOSED_TEXT
+        value: 'Your ticket was closed. You can open a new one anytime.'
+      - key: LANG_HELP_TEXT
+        value: '*Available commands:* /help /faq /id'
+      - key: LANG_FAQ_TEXT
+        value: 'Frequently asked questions'
+      - key: LANG_SPAM_TEXT
+        value: 'You sent too many messages. Please wait.'
+      - key: LANG_TICKET_TEXT
+        value: 'Ticket'
+      - key: LANG_CLOSED_TEXT
+        value: 'closed'
+      - key: LANG_HELP_STAFF_TEXT
+        value: '*Staff commands:*\n/open - Show open tickets\n/close - Close ticket\n/reopen - Reopen ticket\n/ban - Ban user\n/unban - Unban user\n/clear - Close all tickets'
       - key: MONGO_URI
         sync: false
