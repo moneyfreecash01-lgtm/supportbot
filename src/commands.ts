@@ -89,51 +89,42 @@ const openCommand = (ctx: Context): void => {
  */
 const closeCommand = (ctx: Context): void => {
   if (!ctx.session.admin) return;
-  const groups: string[] = [];
-  const { categories, language } = cache.config;
-
-  if (categories) {
-    categories.forEach(category => {
-      if (!category.subgroups || category.subgroups.length === 0) {
-        if (category.group_id == ctx.chat.id) groups.push(category.name);
-      } else {
-        category.subgroups.forEach((sub: { group_id: any; name: string }) => {
-          if (sub.group_id == ctx.chat.id) groups.push(sub.name);
-        });
-      }
-    });
-  }
+  const { categories } = cache.config;
 
   // Only process if the reply is to a bot message
+  if (!ctx.message.reply_to_message || !ctx.message.reply_to_message.from) return;
   if (!ctx.message.reply_to_message.from.is_bot) return;
   const replyText = ctx.message.reply_to_message.text || ctx.message.reply_to_message.caption;
   if (!replyText) return;
   const ticketId = extractTicketId(replyText);
   if (!ticketId) return;
 
-  db.open((tickets: ISupportee[]) => {
-    if (!tickets) {
-      log.info('Close command: tickets undefined');
+  const paddedTicket = ticketId.toString().padStart(6, '0');
+
+  // Find the ticket directly by ticketId
+  db.getByTicketId(ticketId, (ticket: ISupportee | null) => {
+    if (!ticket) {
+      middleware.reply(ctx, cache.config.language.ticketClosedError);
       return;
     }
-    let userId: any = null;
-    tickets.forEach(ticket => {
-      if (ticket.ticketId.toString().padStart(6, '0') === ticketId) {
-        db.add(ticket.userid, 'closed', ticket.category, ctx.messenger);
-      }
-      userId = ticket.userid;
-    });
-    const paddedTicket = ticketId.toString().padStart(6, '0');
+
+    // Close the ticket in DB
+    db.add(ticket.userid, 'closed', ticket.category, ctx.messenger);
+
+    // Notify staff group
     middleware.reply(ctx, `${cache.config.language.ticket} #T${paddedTicket} ${cache.config.language.closed}`);
+
+    // Notify the user
     middleware.sendMessage(
-      userId,
-      ctx.messenger,
+      ticket.userid,
+      ticket.messenger,
       `${cache.config.language.ticket} #T${paddedTicket} ${cache.config.language.closed}\n\n${cache.config.language.ticketClosed}`
     );
-    delete cache.ticketIDs[userId];
-    delete cache.ticketStatus[userId];
-    delete cache.ticketSent[userId];
-  }, groups);
+
+    delete cache.ticketIDs[ticket.userid];
+    delete cache.ticketStatus[ticket.userid];
+    delete cache.ticketSent[ticket.userid];
+  });
 };
 
 /**
