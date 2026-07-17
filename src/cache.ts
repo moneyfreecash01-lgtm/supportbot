@@ -67,7 +67,7 @@ if (fs.existsSync('./config/config.yaml')) {
       ticket: process.env.LANG_TICKET_TEXT || 'Ticket',
       closed: process.env.LANG_CLOSED_TEXT || 'closed',
       acceptedBy: 'was accepted by',
-      dear: 'Hi',
+      dear: process.env.LANG_DEAR_TEXT || 'Hey',
       regards: 'Regards,',
       from: 'from',
       language: 'Language',
