@@ -71,7 +71,7 @@ async function fileHandler(type: string, bot: Addon, ctx: Context) {
     return;
   }
 
-  let captionText = `${config.language.ticket} #T${ticket.id
+  let captionText = `${config.language.ticket} #T${ticket.ticketId
     .toString()
     .padStart(6, '0')} ${userInfo}\n${message.caption || ''}`;
   if (session.admin && userInfo === undefined) {
@@ -107,7 +107,7 @@ async function fileHandler(type: string, bot: Addon, ctx: Context) {
               [
                 {
                   text: config.language.replyPrivate,
-                  callback_data: `${ctx.from.id}---${message.from.first_name}---${session.groupCategory}---${ticket.id}`,
+                  callback_data: `${ctx.from.id}---${message.from.first_name}---${session.groupCategory}---${ticket.ticketId}`,
                 },
               ],
             ],
@@ -130,7 +130,7 @@ async function fileHandler(type: string, bot: Addon, ctx: Context) {
               [
                 {
                   text: config.language.replyPrivate,
-                  callback_data: `${ctx.from.id}---${message.from.first_name}---${session.groupCategory}---${ticket.id}`,
+                  callback_data: `${ctx.from.id}---${message.from.first_name}---${session.groupCategory}---${ticket.ticketId}`,
                 },
               ],
             ],
@@ -153,7 +153,7 @@ async function fileHandler(type: string, bot: Addon, ctx: Context) {
               [
                 {
                   text: config.language.replyPrivate,
-                  callback_data: `${ctx.from.id}---${message.from.first_name}---${session.groupCategory}---${ticket.id}`,
+                  callback_data: `${ctx.from.id}---${message.from.first_name}---${session.groupCategory}---${ticket.ticketId}`,
                 },
               ],
             ],
@@ -167,7 +167,7 @@ async function fileHandler(type: string, bot: Addon, ctx: Context) {
   // Send confirmation message if enabled
   if (!config.autoreply_confirmation) return;
   let confirmationMessage = `${config.language.confirmationMessage}${config.show_user_ticket
-    ? config.language.yourTicketId + ' #T' + ticket.id.toString().padStart(6, '0')
+    ? config.language.yourTicketId + ' #T' + ticket.ticketId.toString().padStart(6, '0')
     : ''
     }`;
   if (session.admin && userInfo === undefined) {

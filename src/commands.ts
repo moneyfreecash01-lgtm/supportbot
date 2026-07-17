@@ -75,7 +75,7 @@ const openCommand = (ctx: Context): void => {
         } else if (uidStr.includes('SIGNAL')) {
           ticketInfo = '(signal)';
         }
-        openTickets += `#T${ticket.id.toString().padStart(6, '0')} ${ticketInfo}\n`;
+        openTickets += `#T${ticket.ticketId.toString().padStart(6, '0')} ${ticketInfo}\n`;
       }
     });
     middleware.reply(ctx, `*${language.openTickets}\n\n* ${openTickets}`);
@@ -118,7 +118,7 @@ const closeCommand = (ctx: Context): void => {
     }
     let userId: any = null;
     tickets.forEach(ticket => {
-      if (ticket.id.toString().padStart(6, '0') === ticketId) {
+      if (ticket.ticketId.toString().padStart(6, '0') === ticketId) {
         db.add(ticket.userid, 'closed', ticket.category, ctx.messenger);
       }
       userId = ticket.userid;
@@ -173,7 +173,7 @@ const reopenCommand = (ctx: Context): void => {
     middleware.sendMessage(
       ctx.chat.id,
       ctx.messenger,
-      `${cache.config.language.usr_with_ticket} #T${ticket.id.toString().padStart(6, '0')} ${cache.config.language.ticketReopened}`
+      `${cache.config.language.usr_with_ticket} #T${ticket.ticketId.toString().padStart(6, '0')} ${cache.config.language.ticketReopened}`
     );
   });
 };
@@ -194,7 +194,7 @@ const unbanCommand = (ctx: Context): void => {
     middleware.sendMessage(
       ctx.chat.id,
       ctx.messenger,
-      `${cache.config.language.usr_with_ticket} #T${ticket.id.toString().padStart(6, '0')} unbanned`
+      `${cache.config.language.usr_with_ticket} #T${ticket.ticketId.toString().padStart(6, '0')} unbanned`
     );
   });
 };
