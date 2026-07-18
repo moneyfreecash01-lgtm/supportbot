@@ -70,6 +70,7 @@ export interface Language {
   regardsGroup: string;
   autoClosed: string;
   autoClosedStaff: string;
+  abuseWarning: string;
   autoreply: Autoreply[];
 }
 
@@ -129,6 +130,8 @@ export class Config {
   llm_base_url: string;
   llm_model: string;
   llm_knowledge: string;
+  abuse_filter_enabled: boolean = false;
+  bad_words: string[] = [];
 }
 
 export interface Cache {

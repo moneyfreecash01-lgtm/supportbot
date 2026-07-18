@@ -4,6 +4,7 @@ import * as staff from './staff';
 import * as users from './users';
 import * as middleware from './middleware';
 import * as commands from './commands';
+import { containsAbuse, getWarningMessage } from './abuse';
 import { Addon, Context } from './interfaces';
 import { ISupportee } from './db';
 
@@ -42,6 +43,13 @@ const shouldReplyWithCategoryKeyboard = (ctx: Context): boolean => {
  * @param keys - Keyboard keys to use for replies.
  */
 export function handleText(bot: Addon, ctx: Context, keys: any[] = []) {
+  // Abuse filter - check before anything else
+  if (cache.config.abuse_filter_enabled && ctx.message?.text && !ctx.session.admin) {
+    if (containsAbuse(ctx.message.text)) {
+      return middleware.reply(ctx, getWarningMessage());
+    }
+  }
+
   // Handle broadcast message from admin
   const broadcastKey = `${ctx.from.id}:${ctx.chat.id}`;
   if (cache.broadcastState[broadcastKey]) {
