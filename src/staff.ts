@@ -23,9 +23,9 @@ function ticketMsg(
     return esc(message.text);
   }
   if (config.anonymous_replies) {
-    return `${config.language.dear} ${esc(name)},\n\n${esc(message.text)}\n\n— ${config.language.regardsGroup}`;
+    return `${config.language.dear} ${esc(name)},\n\n${esc(message.text)}`;
   }
-  return `${config.language.dear} ${esc(name)},\n\n${esc(message.text)}\n\n— ${esc(message.from.first_name)}`;
+  return `${config.language.dear} ${esc(name)},\n\n${esc(message.text)}`;
 }
 
 /**
