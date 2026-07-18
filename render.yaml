@@ -39,3 +39,13 @@ services:
         value: 'Ticket auto-closed: 5 minutes of inactivity.'
       - key: MONGO_URI
         sync: false
+      - key: USE_LLM
+        value: 'true'
+      - key: LLM_BASE_URL
+        value: 'https://api.groq.com/openai/v1'
+      - key: LLM_MODEL
+        value: 'llama-3.3-70b-versatile'
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_KNOWLEDGE
+        value: 'Q: How to activate key? A: Go to Settings and paste your license key. Q: How to reset license? A: Reset from the dashboard. Q: What if key not working? A: Contact support with your order ID.'
