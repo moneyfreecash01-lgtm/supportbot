@@ -187,7 +187,7 @@ export class Context {
     type: string;
   };
   session: SessionData;
-  callbackQuery: { data: string; from: { id: any }; id: any };
+  callbackQuery: { data: string; from: { id: any }; id: any; message?: { chat: { id: any } } };
   from: { username: any; id: string };
   inlineQuery: any;
   reply: Function;
