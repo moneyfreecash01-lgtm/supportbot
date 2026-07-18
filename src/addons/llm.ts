@@ -20,6 +20,8 @@ async function getResponseFromLLM(ctx: Context): Promise<string | null> {
 
     var response = null
     try {
+        console.log('[LLM] Base URL:', cache.config.llm_base_url);
+        console.log('[LLM] Model:', cache.config.llm_model);
         response = await llm.chat.completions.create({
             model: cache.config.llm_model || 'gpt-3.5-turbo',
             messages: [
