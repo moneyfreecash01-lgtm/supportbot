@@ -217,3 +217,11 @@ export const getAllUserIds = async (status?: string | null): Promise<string[]> =
   const result = await Supportee.distinct('userid', query);
   return result.filter((id: string) => id && !id.includes('WEB') && !id.includes('SIGNAL'));
 };
+
+export const getStats = async (): Promise<{ total: number; open: number; closed: number; banned: number }> => {
+  const total = await Supportee.countDocuments();
+  const open = await Supportee.countDocuments({ status: 'open' });
+  const closed = await Supportee.countDocuments({ status: 'closed' });
+  const banned = await Supportee.countDocuments({ status: 'banned' });
+  return { total, open, closed, banned };
+};

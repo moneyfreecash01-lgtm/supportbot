@@ -62,7 +62,7 @@ if (fs.existsSync('./config/config.yaml')) {
       startCommandText: process.env.LANG_START_TEXT || 'Welcome to our support chat! Ask your question here.',
       faqCommandText: process.env.LANG_FAQ_TEXT || 'Get this bot at: [github.com](https://github.com/bostrot/telegram-support-bot)',
       helpCommandText: process.env.LANG_HELP_TEXT || '*Available commands:* /help /faq /id',
-      helpCommandStaffText: process.env.LANG_HELP_STAFF_TEXT || '*Available commands:*\n/start - Get introduction\n/faq - Show FAQ\n/open - *Staff* Show open tickets\n/reopen - *Staff* Reopen ticket\n/close - *Staff* Close ticket\n/clear - *Staff* Close all tickets\n/ban - *Staff* Ban user\n/unban - *Staff* Unban user',
+      helpCommandStaffText: process.env.LANG_HELP_STAFF_TEXT || '*Available commands:*\n/start - Get introduction\n/faq - Show FAQ\n/open - *Staff* Show open tickets\n/reopen - *Staff* Reopen ticket\n/close - *Staff* Close ticket\n/clear - *Staff* Close all tickets\n/ban - *Staff* Ban user\n/unban - *Staff* Unban user\n/broadcast - *Staff* Broadcast message\n/stats - *Staff* Show bot statistics',
       confirmationMessage: process.env.LANG_CONFIRM_TEXT || 'Thank you for contacting us. We will answer as soon as possible.',
       blockedSpam: process.env.LANG_SPAM_TEXT || 'You sent quite a number of questions. Please calm down and wait.',
       ticket: process.env.LANG_TICKET_TEXT || 'Ticket',

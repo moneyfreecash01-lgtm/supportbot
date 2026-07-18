@@ -245,6 +245,22 @@ const broadcastExecute = async (ctx: Context, target: string): Promise<void> => 
   });
 };
 
+/**
+ * Show bot statistics.
+ */
+const statsCommand = async (ctx: Context): Promise<void> => {
+  if (!ctx.session.admin) return;
+  const stats = await db.getStats();
+  middleware.reply(ctx,
+    `*Bot Statistics*\n\n` +
+    `👥 Total Users: *${stats.total}*\n` +
+    `🟢 Open Tickets: *${stats.open}*\n` +
+    `✅ Closed: *${stats.closed}*\n` +
+    `🚫 Banned: *${stats.banned}*`,
+    { parse_mode: 'Markdown' }
+  );
+};
+
 export {
   banCommand,
   openCommand,
@@ -255,4 +271,5 @@ export {
   helpCommand,
   broadcastCommand,
   broadcastExecute,
+  statsCommand,
 };

@@ -15,6 +15,7 @@ export function registerCommonHandlers(addon: any, keys?: any) {
   addon.command('unban', (ctx: any) => commands.unbanCommand(ctx));
   addon.command('clear', (ctx: any) => commands.clearCommand(ctx));
   addon.command('broadcast', (ctx: any) => commands.broadcastCommand(ctx));
+  addon.command('stats', (ctx: any) => commands.statsCommand(ctx));
 
   addon.command('id', (ctx: any) =>
     middleware.reply(ctx, `User ID: ${ctx.from.id}\nGroup ID: ${ctx.chat.id}`, {
