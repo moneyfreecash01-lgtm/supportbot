@@ -49,3 +49,9 @@ services:
         sync: false
       - key: LLM_KNOWLEDGE
         value: 'Q: How to activate key? A: Go to Settings and paste your license key. Q: How to reset license? A: Reset from the dashboard. Q: What if key not working? A: Contact support with your order ID.'
+      - key: ABUSE_FILTER
+        value: 'true'
+      - key: BAD_WORDS
+        value: ''
+      - key: LANG_ABUSE_WARNING
+        value: '⚠️ Please maintain a respectful language. Abusive messages are not tolerated. Continued abuse may result in a ban.'
