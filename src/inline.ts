@@ -141,7 +141,6 @@ function callbackQuery(ctx: Context) {
     const key = `${userId}:${chatId}`;
     const target = data === 'broadcast_all' ? 'all' : 'open';
     cache.broadcastState[key] = { target };
-    try { ctx.answerCbQuery('Now type your broadcast message', false); } catch (e) {}
     middleware.sendMessage(chatId, Messenger.TELEGRAM, `*Broadcast to ${target === 'all' ? 'all users' : 'open tickets'}*\n\nType the message you want to send:`, {
       parse_mode: 'Markdown',
     });
@@ -153,7 +152,6 @@ function callbackQuery(ctx: Context) {
     const userId = ctx.callbackQuery.from.id;
     const key = `${userId}:${chatId}`;
     delete cache.broadcastState[key];
-    try { ctx.answerCbQuery('Broadcast cancelled', false); } catch (e) {}
     middleware.sendMessage(chatId, Messenger.TELEGRAM, 'Broadcast cancelled.');
     return;
   }
@@ -195,8 +193,6 @@ function callbackQuery(ctx: Context) {
       ],
     },
   });
-
-  ctx.answerCbQuery(cache.config.language.instructionsSent, true);
 }
 
 export { callbackQuery, initInline, replyKeyboard, removeKeyboard };
