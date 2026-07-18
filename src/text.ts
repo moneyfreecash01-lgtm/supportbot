@@ -43,6 +43,9 @@ const shouldReplyWithCategoryKeyboard = (ctx: Context): boolean => {
  * @param keys - Keyboard keys to use for replies.
  */
 export function handleText(bot: Addon, ctx: Context, keys: any[] = []) {
+  // Skip commands (they are handled by command handlers)
+  if (ctx.message?.text?.startsWith('/')) return;
+
   // Abuse filter - check before anything else
   if (cache.config.abuse_filter_enabled && ctx.message?.text && !ctx.session.admin) {
     if (containsAbuse(ctx.message.text)) {

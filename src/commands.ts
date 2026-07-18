@@ -261,6 +261,43 @@ const statsCommand = async (ctx: Context): Promise<void> => {
   );
 };
 
+/**
+ * Opens a new ticket for the user (bypasses auto-reply).
+ */
+const ticketCommand = async (ctx: Context): Promise<void> => {
+  if (ctx.chat.type !== 'private') {
+    middleware.reply(ctx, 'Please use this command in private chat.');
+    return;
+  }
+
+  const { config } = cache;
+  const userId = ctx.from.id;
+
+  // Check if ticket already exists
+  const existingTicket = await db.getTicketByUserId(userId, ctx.session.groupCategory);
+  if (existingTicket && existingTicket.status === 'open') {
+    middleware.reply(ctx,
+      `You already have an open ticket: #T${existingTicket.ticketId.toString().padStart(6, '0')}\n\nSend your message here and it will be forwarded to staff.`,
+      { parse_mode: config.parse_mode }
+    );
+    return;
+  }
+
+  // Create new ticket
+  const ticket = await db.add(userId, 'open', ctx.session.groupCategory, ctx.messenger);
+
+  // Send confirmation to user
+  const confirmationMsg = config.language.confirmationMessage + '\n' +
+    (config.show_user_ticket
+      ? `${config.language.ticket} #T${ticket.ticketId.toString().padStart(6, '0')}`
+      : '');
+  middleware.reply(ctx, confirmationMsg);
+
+  // Notify staff
+  const staffMsg = `🎫 *New Ticket Created via /ticket*\n\n${config.language.ticket} #T${ticket.ticketId.toString().padStart(6, '0')} ${config.language.from} [${ctx.message.from.first_name}](tg://user?id=${userId}) ${config.language.language}: ${ctx.message.from.language_code}\n\nUser started a new support ticket.`;
+  middleware.sendMessage(config.staffchat_id, config.staffchat_type, staffMsg);
+};
+
 export {
   banCommand,
   openCommand,
@@ -272,4 +309,5 @@ export {
   broadcastCommand,
   broadcastExecute,
   statsCommand,
+  ticketCommand,
 };

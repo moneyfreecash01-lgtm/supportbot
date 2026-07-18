@@ -31,6 +31,8 @@ export function registerCommonHandlers(addon: any, keys?: any) {
 
   addon.command('help', (ctx: any) => commands.helpCommand(ctx));
 
+  addon.command('ticket', (ctx: any) => commands.ticketCommand(ctx));
+
   // Common "links" command with platform-specific URL handling.
   addon.command('links', (ctx: any) => {
     let links = '';
