@@ -139,7 +139,7 @@ function callbackQuery(ctx: Context) {
     const key = `${ctx.callbackQuery.from.id}:${ctx.chat?.id}`;
     const target = data === 'broadcast_all' ? 'all' : 'open';
     cache.broadcastState[key] = { target };
-    ctx.answerCbQuery('Now type your broadcast message');
+    ctx.answerCbQuery('Now type your broadcast message', false);
     middleware.reply(ctx, `*Broadcast to ${target === 'all' ? 'all users' : 'open tickets'}*\n\nType the message you want to send:`, {
       parse_mode: 'Markdown',
     });
@@ -149,7 +149,7 @@ function callbackQuery(ctx: Context) {
   if (data === 'broadcast_cancel') {
     const key = `${ctx.callbackQuery.from.id}:${ctx.chat?.id}`;
     delete cache.broadcastState[key];
-    ctx.answerCbQuery('Broadcast cancelled');
+    ctx.answerCbQuery('Broadcast cancelled', false);
     return;
   }
 
