@@ -137,6 +137,7 @@ export interface Cache {
   ticketStatus: any;
   ticketSent: any;
   ticketTimers: Record<number, NodeJS.Timeout>;
+  broadcastState: Record<string, { target: string }>;
   html: string;
   noSound: string;
   markdown: string;

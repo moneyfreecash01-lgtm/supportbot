@@ -8,6 +8,7 @@ const cache: Cache = {
   ticketStatus: {},
   ticketSent: [],
   ticketTimers: {} as Record<number, NodeJS.Timeout>,
+  broadcastState: {} as Record<string, { target: string }>,
   html: '',
   noSound: '',
   markdown: '',

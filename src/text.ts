@@ -3,6 +3,7 @@ import cache from './cache';
 import * as staff from './staff';
 import * as users from './users';
 import * as middleware from './middleware';
+import * as commands from './commands';
 import { Addon, Context } from './interfaces';
 import { ISupportee } from './db';
 
@@ -41,6 +42,12 @@ const shouldReplyWithCategoryKeyboard = (ctx: Context): boolean => {
  * @param keys - Keyboard keys to use for replies.
  */
 export function handleText(bot: Addon, ctx: Context, keys: any[] = []) {
+  // Handle broadcast message from admin
+  const broadcastKey = `${ctx.from.id}:${ctx.chat.id}`;
+  if (cache.broadcastState[broadcastKey]) {
+    return commands.broadcastExecute(ctx, cache.broadcastState[broadcastKey].target);
+  }
+
   // Handle private replies via staff
   if (ctx.session.mode === 'private_reply') {
     return staff.privateReply(ctx);

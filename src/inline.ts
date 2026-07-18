@@ -2,6 +2,7 @@ import { Context, Messenger, ModeData } from './interfaces';
 import TelegramAddon from './addons/telegram';
 import cache from './cache';
 import * as middleware from './middleware';
+import * as commands from './commands';
 
 /**
  * Helper function for reply keyboard.
@@ -131,6 +132,27 @@ function initInline(bot: TelegramAddon) {
  * @param ctx - The context of the callback.
  */
 function callbackQuery(ctx: Context) {
+  const data = ctx.callbackQuery.data;
+
+  // Broadcast callbacks
+  if (data === 'broadcast_all' || data === 'broadcast_open') {
+    const key = `${ctx.callbackQuery.from.id}:${ctx.chat?.id}`;
+    const target = data === 'broadcast_all' ? 'all' : 'open';
+    cache.broadcastState[key] = { target };
+    ctx.answerCbQuery('Now type your broadcast message');
+    middleware.reply(ctx, `*Broadcast to ${target === 'all' ? 'all users' : 'open tickets'}*\n\nType the message you want to send:`, {
+      parse_mode: 'Markdown',
+    });
+    return;
+  }
+
+  if (data === 'broadcast_cancel') {
+    const key = `${ctx.callbackQuery.from.id}:${ctx.chat?.id}`;
+    delete cache.broadcastState[key];
+    ctx.answerCbQuery('Broadcast cancelled');
+    return;
+  }
+
   // End callback session if data equals 'R'
   if (ctx.callbackQuery.data === 'R') {
     ctx.session.mode = '';

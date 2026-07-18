@@ -210,3 +210,10 @@ export const open = async (
   const result = await Supportee.find(query);
   callback(result);
 };
+
+export const getAllUserIds = async (status?: string | null): Promise<string[]> => {
+  const query: any = {};
+  if (status) query.status = status;
+  const result = await Supportee.distinct('userid', query);
+  return result.filter((id: string) => id && !id.includes('WEB') && !id.includes('SIGNAL'));
+};

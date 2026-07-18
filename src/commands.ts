@@ -190,6 +190,61 @@ const unbanCommand = (ctx: Context): void => {
   });
 };
 
+/**
+ * Broadcast command - starts the broadcast flow.
+ */
+const broadcastCommand = (ctx: Context): void => {
+  if (!ctx.session.admin) return;
+  const key = `${ctx.from.id}:${ctx.chat.id}`;
+  cache.broadcastState[key] = { target: '' };
+  middleware.reply(ctx, '*Broadcast*\n\nWho should receive this message?', {
+    parse_mode: 'Markdown',
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: '📢 All Users', callback_data: 'broadcast_all' }],
+        [{ text: '🟢 Open Tickets Only', callback_data: 'broadcast_open' }],
+        [{ text: '❌ Cancel', callback_data: 'broadcast_cancel' }],
+      ],
+    },
+  });
+};
+
+/**
+ * Execute broadcast - send message to target users.
+ */
+const broadcastExecute = async (ctx: Context, target: string): Promise<void> => {
+  if (!ctx.session.admin) return;
+  const key = `${ctx.from.id}:${ctx.chat.id}`;
+  const state = cache.broadcastState[key];
+  if (!state) return;
+
+  const msgText = ctx.message.text;
+  if (!msgText || msgText.startsWith('/')) return;
+
+  delete cache.broadcastState[key];
+
+  const userIds = await db.getAllUserIds(target === 'open' ? 'open' : null);
+  if (!userIds || userIds.length === 0) {
+    middleware.reply(ctx, 'No users found to broadcast to.');
+    return;
+  }
+
+  let sent = 0;
+  let failed = 0;
+  for (const uid of userIds) {
+    try {
+      await middleware.sendMessage(uid, 'telegram', msgText);
+      sent++;
+    } catch {
+      failed++;
+    }
+  }
+
+  middleware.reply(ctx, `*Broadcast sent!*\n\n✅ Sent: ${sent}\n❌ Failed: ${failed}\n👥 Total: ${userIds.length}`, {
+    parse_mode: 'Markdown',
+  });
+};
+
 export {
   banCommand,
   openCommand,
@@ -198,4 +253,6 @@ export {
   clearCommand,
   reopenCommand,
   helpCommand,
+  broadcastCommand,
+  broadcastExecute,
 };
