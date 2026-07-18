@@ -277,7 +277,7 @@ const ticketCommand = async (ctx: Context): Promise<void> => {
   const existingTicket = await db.getTicketByUserId(userId, ctx.session.groupCategory);
   if (existingTicket && existingTicket.status === 'open') {
     middleware.reply(ctx,
-      `You already have an open ticket: #T${existingTicket.ticketId.toString().padStart(6, '0')}\n\nSend your message here and it will be forwarded to staff.`,
+      `You already have an open ticket: #T${existingTicket.ticketId.toString().padStart(6, '0')}\n\nPlease share the issue in details you are facing currently.`,
       { parse_mode: config.parse_mode }
     );
     return;
@@ -287,15 +287,9 @@ const ticketCommand = async (ctx: Context): Promise<void> => {
   const ticket = await db.add(userId, 'open', ctx.session.groupCategory, ctx.messenger);
 
   // Send confirmation to user
-  const confirmationMsg = config.language.confirmationMessage + '\n' +
-    (config.show_user_ticket
-      ? `${config.language.ticket} #T${ticket.ticketId.toString().padStart(6, '0')}`
-      : '');
-  middleware.reply(ctx, confirmationMsg);
-
-  // Notify staff
-  const staffMsg = `🎫 *New Ticket Created via /ticket*\n\n${config.language.ticket} #T${ticket.ticketId.toString().padStart(6, '0')} ${config.language.from} [${ctx.message.from.first_name}](tg://user?id=${userId}) ${config.language.language}: ${ctx.message.from.language_code}\n\nUser started a new support ticket.`;
-  middleware.sendMessage(config.staffchat_id, config.staffchat_type, staffMsg);
+  middleware.reply(ctx,
+    `Your ticket has been created successfully! Your ticket ID: #T${ticket.ticketId.toString().padStart(6, '0')}\n\nPlease share the issue in details you are facing currently. A live support agent will join after you share the details.`
+  );
 };
 
 export {
