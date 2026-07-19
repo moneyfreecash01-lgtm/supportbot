@@ -3,6 +3,7 @@ import * as middleware from './middleware';
 import * as inline from './inline';
 import * as files from './files';
 import * as text from './text';
+import { isUserInChannel } from './channel';
 import cache from './cache';
 import * as log from 'fancy-log'
 
@@ -63,8 +64,20 @@ export function registerCommonHandlers(addon: any, keys?: any) {
   });
 
   if (cache.config.pass_start === false) {
-    addon.command('start', (ctx: any) => {
+    addon.command('start', async (ctx: any) => {
       if (ctx.chat.type === 'private') {
+        // Channel join check
+        if (cache.config.channel_username && !ctx.session.admin) {
+          const isMember = await isUserInChannel(ctx.from.id);
+          if (!isMember) {
+            const channelUrl = `https://t.me/${cache.config.channel_username.replace('@', '')}`;
+            return middleware.reply(ctx,
+              `${cache.config.language.joinChannelMessage}\n\n👉 [Join Channel](${channelUrl})`,
+              { parse_mode: 'Markdown' }
+            );
+          }
+        }
+
         middleware.reply(ctx, cache.config.language.startCommandText);
         if (cache.config.categories && cache.config.categories.length > 0) {
           // For Telegram, use inline keyboard keys if available.
