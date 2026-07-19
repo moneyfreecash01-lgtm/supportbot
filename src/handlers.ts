@@ -72,8 +72,12 @@ export function registerCommonHandlers(addon: any, keys?: any) {
           if (!isMember) {
             const channelUrl = `https://t.me/${cache.config.channel_username.replace('@', '')}`;
             return middleware.reply(ctx,
-              `${cache.config.language.joinChannelMessage}\n\n👉 [Join Channel](${channelUrl})`,
-              { parse_mode: 'Markdown' }
+              cache.config.language.joinChannelMessage,
+              {
+                reply_markup: {
+                  inline_keyboard: [[{ text: '👉 Join Channel', url: channelUrl }]]
+                }
+              }
             );
           }
         }

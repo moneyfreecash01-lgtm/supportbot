@@ -277,8 +277,12 @@ const ticketCommand = async (ctx: Context): Promise<void> => {
     if (!isMember) {
       const channelUrl = `https://t.me/${cache.config.channel_username.replace('@', '')}`;
       middleware.reply(ctx,
-        `${cache.config.language.joinChannelMessage}\n\n👉 [Join Channel](${channelUrl})`,
-        { parse_mode: 'Markdown' }
+        cache.config.language.joinChannelMessage,
+        {
+          reply_markup: {
+            inline_keyboard: [[{ text: '👉 Join Channel', url: channelUrl }]]
+          }
+        }
       );
       return;
     }
