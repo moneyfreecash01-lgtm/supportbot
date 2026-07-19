@@ -71,6 +71,7 @@ export interface Language {
   autoClosed: string;
   autoClosedStaff: string;
   abuseWarning: string;
+  joinChannelMessage: string;
   autoreply: Autoreply[];
 }
 
@@ -133,7 +134,6 @@ export class Config {
   abuse_filter_enabled: boolean = false;
   bad_words: string[] = [];
   channel_username: string = '';
-  joinChannelMessage: string = '';
 }
 
 export interface Cache {

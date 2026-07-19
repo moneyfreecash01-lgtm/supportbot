@@ -61,7 +61,6 @@ if (fs.existsSync('./config/config.yaml')) {
     abuse_filter_enabled: process.env.ABUSE_FILTER === 'true',
     bad_words: process.env.BAD_WORDS ? process.env.BAD_WORDS.split(',').map(w => w.trim()) : [],
     channel_username: process.env.CHANNEL_USERNAME || '',
-    joinChannelMessage: process.env.LANG_JOIN_CHANNEL || '⚠️ Please join our main channel to use this bot:',
     language: {
       startCommandText: process.env.LANG_START_TEXT || 'Welcome to our support chat! Ask your question here.',
       faqCommandText: process.env.LANG_FAQ_TEXT || 'Get this bot at: [github.com](https://github.com/bostrot/telegram-support-bot)',
@@ -108,6 +107,7 @@ if (fs.existsSync('./config/config.yaml')) {
       autoClosed: process.env.LANG_AUTO_CLOSED_TEXT || 'This ticket has been automatically closed due to 5 minutes of inactivity.',
       autoClosedStaff: process.env.LANG_AUTO_CLOSED_STAFF_TEXT || 'Ticket auto-closed: 5 minutes of inactivity.',
       abuseWarning: process.env.LANG_ABUSE_WARNING || '⚠️ Please maintain a respectful language. Abusive messages are not tolerated. Continued abuse may result in a ban.',
+      joinChannelMessage: process.env.LANG_JOIN_CHANNEL || '⚠️ Please join our main channel to use our support bot:',
       autoreply: [],
     } as any,
     autoreply: [],
