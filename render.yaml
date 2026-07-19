@@ -55,3 +55,7 @@ services:
         value: ''
       - key: LANG_ABUSE_WARNING
         value: '⚠️ Please maintain a respectful language. Abusive messages are not tolerated. Continued abuse may result in a ban.'
+      - key: CHANNEL_USERNAME
+        value: '@nexoraproff'
+      - key: LANG_JOIN_CHANNEL
+        value: '⚠️ Please join our main channel to use our support bot:'
