@@ -132,6 +132,8 @@ export class Config {
   llm_knowledge: string;
   abuse_filter_enabled: boolean = false;
   bad_words: string[] = [];
+  channel_username: string = '';
+  joinChannelMessage: string = '';
 }
 
 export interface Cache {

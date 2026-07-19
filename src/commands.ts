@@ -1,6 +1,7 @@
 import * as db from './db';
 import cache from './cache';
 import * as middleware from './middleware';
+import { isUserInChannel } from './channel';
 import { Context } from './interfaces';
 import { ISupportee } from './db';
 import * as log from 'fancy-log'
@@ -268,6 +269,19 @@ const ticketCommand = async (ctx: Context): Promise<void> => {
   if (ctx.chat.type !== 'private') {
     middleware.reply(ctx, 'Please use this command in private chat.');
     return;
+  }
+
+  // Channel join check
+  if (cache.config.channel_username) {
+    const isMember = await isUserInChannel(ctx.from.id);
+    if (!isMember) {
+      const channelUrl = `https://t.me/${cache.config.channel_username.replace('@', '')}`;
+      middleware.reply(ctx,
+        `${cache.config.language.joinChannelMessage}\n\n👉 [Join Channel](${channelUrl})`,
+        { parse_mode: 'Markdown' }
+      );
+      return;
+    }
   }
 
   const { config } = cache;

@@ -5,6 +5,7 @@ import * as users from './users';
 import * as middleware from './middleware';
 import * as commands from './commands';
 import { containsAbuse, getWarningMessage } from './abuse';
+import { isUserInChannel } from './channel';
 import { Addon, Context } from './interfaces';
 import { ISupportee } from './db';
 
@@ -42,9 +43,21 @@ const shouldReplyWithCategoryKeyboard = (ctx: Context): boolean => {
  * @param ctx - The context of the message.
  * @param keys - Keyboard keys to use for replies.
  */
-export function handleText(bot: Addon, ctx: Context, keys: any[] = []) {
+export async function handleText(bot: Addon, ctx: Context, keys: any[] = []) {
   // Skip commands (they are handled by command handlers)
   if (ctx.message?.text?.startsWith('/')) return;
+
+  // Channel join check - only for non-admin users in private chat
+  if (cache.config.channel_username && !ctx.session.admin && ctx.chat?.type === 'private') {
+    const isMember = await isUserInChannel(ctx.from.id);
+    if (!isMember) {
+      const channelUrl = `https://t.me/${cache.config.channel_username.replace('@', '')}`;
+      return middleware.reply(ctx,
+        `${cache.config.language.joinChannelMessage}\n\n👉 [Join Channel](${channelUrl})`,
+        { parse_mode: 'Markdown' }
+      );
+    }
+  }
 
   // Abuse filter - check before anything else
   if (cache.config.abuse_filter_enabled && ctx.message?.text && !ctx.session.admin) {
